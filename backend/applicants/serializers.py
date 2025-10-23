@@ -22,8 +22,10 @@ class AcademicSerializer(serializers.ModelSerializer):
 
 class ApplicantSerializer(serializers.ModelSerializer):
     academics = AcademicSerializer(many=True, read_only=True)
+
     created_by_email = serializers.EmailField(source='created_by.email', read_only=True)
     created_by_name = serializers.CharField(source='created_by.full_name', read_only=True)
+    
     document_url = serializers.SerializerMethodField()
     
     class Meta:
@@ -70,6 +72,7 @@ class ApplicantSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_by', 'created_at', 'updated_at', 'document_url']
     
     def get_document_url(self, obj):
+        
         if obj.document:
             request = self.context.get('request')
             if request:

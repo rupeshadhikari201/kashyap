@@ -2,12 +2,13 @@
     "name": "app",
     "version": "0.1.0",
     "private": true,
+    
     "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "node server.js"
-    },  
-   
+        "dev": "next dev --turbopack",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
     "dependencies": {
         "@babel/parser": "^7.28.4",
         "@headlessui/react": "^2.2.9",

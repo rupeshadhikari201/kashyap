@@ -15,6 +15,8 @@ from datetime import timedelta
 from decouple import config
 import os
 import dj_database_url
+from dotenv import load_dotenv
+load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,12 +26,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y4*og60@_7dcy)i7z&pqhl&bus8^=cg69wiuaa8k6l!4-so_k8'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
+print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
 # Application definition
 
@@ -49,14 +52,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'storages',
 ]
 
 # Custom User Model
 AUTH_USER_MODEL = 'users.User'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  
-]
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000').split(',')
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -104,10 +107,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     "default": dj_database_url.parse(
-        os.getenv("DATABASE_URL"),
+        config("DATABASE_URL"),
         conn_max_age=600,
         conn_health_checks=True,
     )
+    # "default" : {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",}
 }
 
 # Smtp Email Configuration
@@ -170,23 +176,22 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-FRONTEND_URL = 'http://localhost:3000'
+FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:3000')
 
 
-# static & media – we’ll serve via Nginx (Render does it automatically)
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-# Media Files (for local file uploads)
+
 MEDIA_URL = '/media/' # URL prefix for media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Directory to store uploaded media files
 
 
-# ----------  Storj (S3-compatible) ----------
+
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-AWS_S3_ENDPOINT_URL = os.getenv("STORJ_ENDPOINT")
-AWS_ACCESS_KEY_ID = os.getenv("STORJ_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("STORJ_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.getenv("STORJ_BUCKET")
+AWS_S3_ENDPOINT_URL = config("AWS_S3_ENDPOINT_URL")
+AWS_ACCESS_KEY_ID = config("STORJ_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("STORJ_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = config("STORJ_BUCKET")
 AWS_S3_REGION_NAME = "us-1"
 AWS_DEFAULT_ACL = None
 AWS_S3_OBJECT_PARAMETERS = {

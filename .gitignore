@@ -17,6 +17,8 @@ coverage/
 htmlcov/
 .tox/       
 /media/applicant_documents/
+backend/applicants
+backend/applicants/migrations/0002_alter_applicant_email.py
 backend/media/
 backend/.env
 backend/db.sqlite3
