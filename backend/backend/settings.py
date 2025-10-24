@@ -16,7 +16,8 @@ from decouple import config
 import os
 import dj_database_url
 from dotenv import load_dotenv
-load_dotenv
+load_dotenv()
+import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -59,11 +60,17 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000').split(',')
+print(CORS_ALLOWED_ORIGINS)
 
+CORS_ALLOW_CREDENTIALS = config(CORS_ALLOW_CREDENTIALS, default=True)
+print(CORS_ALLOW_CREDENTIALS)
 
+CSRF_TRUSTED_ORIGINS = config(CSRF_TRUSTED_ORIGINS).split(',)
+print(CSRF_TRUSTED_ORIGINS)
+                                                          
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -196,4 +203,21 @@ AWS_S3_REGION_NAME = "us-1"
 AWS_DEFAULT_ACL = None
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
+}
+
+# logging
+import logging
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "ERROR",
+    },
 }
