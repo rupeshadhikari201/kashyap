@@ -133,6 +133,7 @@ DATABASES = {
 # EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 # DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='21bcs11201@gmail.com')
 
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY=config('SENDGRID_API_KEY')
 DEFAULT_FROM_EMAIL=config('DEFAULT_FROM_EMAIL')
 
