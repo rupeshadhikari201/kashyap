@@ -65,7 +65,7 @@ print(CORS_ALLOWED_ORIGINS)
 CORS_ALLOW_CREDENTIALS = config(CORS_ALLOW_CREDENTIALS, default=True)
 print(CORS_ALLOW_CREDENTIALS)
 
-CSRF_TRUSTED_ORIGINS = config(CSRF_TRUSTED_ORIGINS).split(',)
+CSRF_TRUSTED_ORIGINS = config(CSRF_TRUSTED_ORIGINS).split(',')
 print(CSRF_TRUSTED_ORIGINS)
                                                           
 MIDDLEWARE = [
@@ -184,7 +184,7 @@ SIMPLE_JWT = {
 }
 
 FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:3000')
-
+print(FRONTEND_URL)
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
