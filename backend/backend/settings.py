@@ -62,10 +62,10 @@ AUTH_USER_MODEL = 'users.User'
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000').split(',')
 print(CORS_ALLOWED_ORIGINS)
 
-CORS_ALLOW_CREDENTIALS = config(CORS_ALLOW_CREDENTIALS, default=True)
+CORS_ALLOW_CREDENTIALS = config('CORS_ALLOW_CREDENTIALS', default=True)
 print(CORS_ALLOW_CREDENTIALS)
 
-CSRF_TRUSTED_ORIGINS = config(CSRF_TRUSTED_ORIGINS).split(',')
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS').split(',')
 print(CSRF_TRUSTED_ORIGINS)
                                                           
 MIDDLEWARE = [
