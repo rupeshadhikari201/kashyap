@@ -9,6 +9,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
+from users.utils import send_sendgrid_mail  
 
 from .serializers import (
     UserRegistrationSerializer, 
@@ -56,17 +57,8 @@ class RegisterView(APIView):
             Best regards,
             Team
             '''
-            
-            try:
-                send_mail(
-                    subject,
-                    message,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [user.email],
-                    fail_silently=False,
-                )
-            except Exception as e:
-                print(e)
+            sent = send_sendgrid_mail(user.email, subject, message)
+            if not sent:
                 return Response(
                     {'error': 'User created but failed to send verification email. Please contact support.'},
                     status=status.HTTP_201_CREATED
@@ -221,17 +213,10 @@ class ForgotPasswordView(APIView):
             Team
             '''
             
-            try:
-                send_mail(
-                    subject,
-                    message,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [user.email],
-                    fail_silently=False,
-                )
-            except Exception as e:
+            sent = send_sendgrid_mail(user.email, subject, message)
+            if not sent:
                 return Response(
-                    {'error': 'Failed to send password reset email. Please try again later.'},
+                    {'error': 'Error Sending Password reset Request. Please contact support.'},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
             
@@ -286,17 +271,12 @@ class ResetPasswordView(APIView):
             Best regards,
             Team
             '''
-            
-            try:    
-                send_mail(
-                    subject,
-                    message,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [user.email],
-                    fail_silently=True,  # Don't fail if confirmation email doesn't send
+            sent = send_sendgrid_mail(user.email, subject, message)
+            if not sent:
+                return Response(
+                    {'error': 'Error sending password reset sucessfull message. Please contact support.'},
+                    status=status.HTTP_201_CREATED
                 )
-            except Exception:
-                pass  # Password is already reset, email is just a courtesy
             
             return Response(
                 {'message': 'Password has been reset successfully. You can now login with your new password.'},
